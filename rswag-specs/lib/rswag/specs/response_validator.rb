@@ -17,6 +17,7 @@ module Rswag
 
         validate_code!(metadata, response)
         validate_headers!(metadata, response.headers)
+        validate_content_type!(metadata, response.headers)
         validate_body!(metadata, swagger_doc, response.body)
       end
 
@@ -47,6 +48,21 @@ module Rswag
 
           if headers.include?(name.to_s) && headers[name.to_s].nil? && !is_nullable
             raise UnexpectedResponse, "Expected response header #{name} to not be null"
+          end
+        end
+      end
+
+      # Add missing content type validation. See https://github.com/rswag/rswag/issues/484
+      def validate_content_type!(metadata, headers)
+        if metadata[:operation][:produces]
+          name = "Content-Type"
+          raise UnexpectedResponse, "Expected response header #{name} to be present" if headers[name.to_s].nil?
+
+          possible_types = metadata[:operation][:produces].join(", ")
+          types_regex = metadata[:operation][:produces].map { |e| Regexp.escape(e) }.join("|")
+          unless headers[name.to_s].match(/^(#{types_regex})(;|$)/)
+            raise UnexpectedResponse,
+                  "Expected response header #{name} to be one of [#{possible_types}], but was '#{headers[name.to_s]}'"
           end
         end
       end
