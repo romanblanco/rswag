@@ -27,6 +27,16 @@ module Rswag
         end
       end
 
+      def swagger_base_path
+        @swagger_base_path ||= begin
+          if @rspec_config.swagger_base_path.present?
+            return @rspec_config.swagger_base_path
+          end
+
+          base_path_from_servers
+        end
+      end
+
       def swagger_dry_run
         return @swagger_dry_run if defined? @swagger_dry_run
         if ENV.key?('SWAGGER_DRY_RUN')

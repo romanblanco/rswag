@@ -32,6 +32,24 @@ module Rswag
         end
       end
 
+      describe '#swagger_base_path' do
+        let(:response) { subject.swagger_base_path }
+
+        context 'provided in rspec config' do
+          it { expect(response).to be_an_instance_of(String) }
+        end
+
+        context 'not provided' do
+          let(:swagger_base_path) { nil }
+          it { expect { response }.to eq(nil) }
+        end
+
+        context 'provided but empty' do
+          let(:swagger_base_path) { '' }
+          it { expect { response }.to eq(nil) }
+        end
+      end
+
       describe '#swagger_docs' do
         let(:response) { subject.swagger_docs }
 

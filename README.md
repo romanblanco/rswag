@@ -291,6 +291,7 @@ In addition to paths, operations and responses, Swagger also supports global API
 # spec/swagger_helper.rb
 RSpec.configure do |config|
   config.swagger_root = Rails.root.to_s + '/swagger'
+  config.swagger_base_path = 'https://www.example.com'
 
   config.swagger_docs = {
     'v1/swagger.json' => {
