@@ -49,17 +49,8 @@ module Rswag
       end
 
       def security_version(scheme_names, swagger_doc)
-        if doc_version(swagger_doc).start_with?('2')
-          (swagger_doc[:securityDefinitions] || {}).slice(*scheme_names).values
-        else # Openapi3
-          if swagger_doc.key?(:securityDefinitions)
-            ActiveSupport::Deprecation.warn('Rswag::Specs: WARNING: securityDefinitions is replaced in OpenAPI3! Rename to components/securitySchemes (in swagger_helper.rb)')
-            swagger_doc[:components] ||= { securitySchemes: swagger_doc[:securityDefinitions] }
-            swagger_doc.delete(:securityDefinitions)
-          end
-          components = swagger_doc[:components] || {}
-          (components[:securitySchemes] || {}).slice(*scheme_names).values
-        end
+        components = swagger_doc[:components] || {}
+        (components[:securitySchemes] || {}).slice(*scheme_names).values
       end
 
       def resolve_parameter(ref, swagger_doc)
@@ -71,30 +62,12 @@ module Rswag
       end
 
       def key_version(ref, swagger_doc)
-        if doc_version(swagger_doc).start_with?('2')
-          ref.sub('#/parameters/', '').to_sym
-        else # Openapi3
-          if ref.start_with?('#/parameters/')
-            ActiveSupport::Deprecation.warn('Rswag::Specs: WARNING: #/parameters/ refs are replaced in OpenAPI3! Rename to #/components/parameters/')
-            ref.sub('#/parameters/', '').to_sym
-          else
-            ref.sub('#/components/parameters/', '').to_sym
-          end
-        end
+        ref.sub('#/components/parameters/', '').to_sym
       end
 
       def definition_version(swagger_doc)
-        if doc_version(swagger_doc).start_with?('2')
-          swagger_doc[:parameters]
-        else # Openapi3
-          if swagger_doc.key?(:parameters)
-            ActiveSupport::Deprecation.warn('Rswag::Specs: WARNING: parameters is replaced in OpenAPI3! Rename to components/parameters (in swagger_helper.rb)')
-            swagger_doc[:parameters]
-          else
-            components = swagger_doc[:components] || {}
-            components[:parameters]
-          end
-        end
+        components = swagger_doc[:components] || {}
+        components[:parameters]
       end
 
       def add_verb(request, metadata)
@@ -111,18 +84,7 @@ module Rswag
       end
 
       def add_path(request, metadata, swagger_doc, parameters, example)
-        open_api_3_doc = doc_version(swagger_doc).start_with?('3')
-        uses_base_path = swagger_doc[:basePath].present?
-
-        if open_api_3_doc && uses_base_path
-          ActiveSupport::Deprecation.warn('Rswag::Specs: WARNING: basePath is replaced in OpenAPI3! Update your swagger_helper.rb')
-        end
-
-        if uses_base_path
-          template = (swagger_doc[:basePath] || '') + metadata[:path_item][:template]
-        else # OpenAPI 3
-          template = base_path_from_servers(swagger_doc) + metadata[:path_item][:template]
-        end
+        template = base_path_from_servers(swagger_doc) + metadata[:path_item][:template]
 
         request[:path] = template.tap do |path_template|
           parameters.select { |p| p[:in] == :path }.each do |p|
@@ -144,7 +106,7 @@ module Rswag
         name = param[:name]
 
         # OAS 3: https://swagger.io/docs/specification/serialization/
-        if swagger_doc && doc_version(swagger_doc).start_with?('3') && param[:schema]
+        if param[:schema]
           style = param[:style]&.to_sym || :form
           explode = param[:explode].nil? ? true : param[:explode]
 

@@ -25,6 +25,5 @@ Add any other context about the problem here.
 The version of rswag are you using.
 
 ## Relates to which version of OAS (Open API Specification)
-- [ ] OAS2
 - [ ] OAS3
 - [ ] OAS3.1

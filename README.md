@@ -23,6 +23,8 @@ Once you have an API that can describe itself in Swagger, you've opened the trea
 | Rswag Version                                        | Swagger (OpenAPI) Spec. | swagger-ui |
 | ---------------------------------------------------- | ----------------------- | ---------- |
 | [master](https://github.com/rswag/rswag/tree/master) | 3.0.3                   | 3.52.5     |
+| [3.0.0](https://github.com/rswag/rswag/tree/3.0.0)   | 3.0.3                   | 3.52.5     |
+| [2.5.1](https://github.com/rswag/rswag/tree/2.5.0)   | 3.0.3                   | 3.52.5     |
 | [2.5.1](https://github.com/rswag/rswag/tree/2.5.0)   | 3.0.3                   | 3.52.5     |
 | [2.3.0](https://github.com/rswag/rswag/tree/2.3.0)   | 3.0.3                   | 3.23.11    |
 | [2.2.0](https://github.com/rswag/rswag/tree/2.2.0)   | 2.0                     | 3.18.2     |
@@ -631,7 +633,7 @@ end
 
 #### Nullable or Optional Response Headers ####
 
-You can include `nullable` or `required` to specify whether a response header must be present or may be null. When `nullable` is not included, the headers validation validates that the header response is non-null. When `required` is not included, the headers validation validates the the header response is passed. 
+You can include `nullable` or `required` to specify whether a response header must be present or may be null. When `nullable` is not included, the headers validation validates that the header response is non-null. When `required` is not included, the headers validation validates the the header response is passed.
 
 ```ruby
 # spec/integration/comments_spec.rb
