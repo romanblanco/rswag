@@ -54,6 +54,12 @@ module Rswag
 
       # Add missing content type validation. See https://github.com/rswag/rswag/issues/484
       def validate_content_type!(metadata, headers)
+        puts "\u001b[31;3m!"
+        puts "{" * 90
+        puts "rswag-specs/lib/rswag/specs/response_validator.rb"
+        pp metadata
+        puts "}" * 90
+        puts "\u001b[0m"
         if metadata[:operation][:produces]
           name = "Content-Type"
           raise UnexpectedResponse, "Expected response header #{name} to be present" if headers[name.to_s].nil?

@@ -18,20 +18,20 @@ module Rswag
         {
           response: {
             code: 200,
-            headers: { 
+            headers: {
               'X-Rate-Limit-Limit' => { type: :integer },
-              'X-Cursor' => { 
-                schema: { 
+              'X-Cursor' => {
+                schema: {
                   type: :string
                 },
                 required: false
               },
-              'X-Per-Page' => { 
-                schema: { 
+              'X-Per-Page' => {
+                schema: {
                   type: :string,
                   nullable: true
                 }
-              } 
+              }
             },
             schema: {
               type: :object,
@@ -50,7 +50,7 @@ module Rswag
         let(:response) do
           OpenStruct.new(
             code: '200',
-            headers: { 
+            headers: {
               'X-Rate-Limit-Limit' => '10',
               'X-Cursor' => 'test_cursor',
               'X-Per-Page' => 25
@@ -60,6 +60,9 @@ module Rswag
         end
 
         context 'response matches metadata' do
+          # metadata[:operation] does not have a content in request
+          #
+          # might want to move this to request_validator instead of response_validator
           it { expect { call }.to_not raise_error }
         end
 
@@ -74,8 +77,8 @@ module Rswag
         end
 
         context 'response headers do not include optional header' do
-          before { 
-            response.headers = { 
+          before {
+            response.headers = {
               'X-Rate-Limit-Limit' => '10',
               'X-Per-Page' => 25
             }
@@ -84,8 +87,8 @@ module Rswag
         end
 
         context 'response headers include nullable header' do
-          before { 
-            response.headers = { 
+          before {
+            response.headers = {
               'X-Rate-Limit-Limit' => '10',
               'X-Cursor' => 'test_cursor',
               'X-Per-Page' => nil
@@ -95,8 +98,8 @@ module Rswag
         end
 
         context 'response headers missing nullable header' do
-          before { 
-            response.headers = { 
+          before {
+            response.headers = {
               'X-Rate-Limit-Limit' => '10',
               'X-Cursor' => 'test_cursor'
             }
@@ -152,7 +155,7 @@ module Rswag
                 let(:response) do
                   OpenStruct.new(
                     code: '200',
-                    headers: { 
+                    headers: {
                       'X-Rate-Limit-Limit' => '10',
                       'X-Cursor' => 'test_cursor',
                       'X-Per-Page' => 25
@@ -193,7 +196,7 @@ module Rswag
                 let(:response) do
                   OpenStruct.new(
                     code: '200',
-                    headers: { 
+                    headers: {
                       'X-Rate-Limit-Limit' => '10',
                       'X-Cursor' => 'test_cursor',
                       'X-Per-Page' => 25
