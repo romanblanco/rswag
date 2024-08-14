@@ -90,6 +90,7 @@ Add and push a new git tag, annotated tags preferred:
 
 ```
 git tag -s 2.0.6 -m 'v2.0.6'
+git push <remote> tag 2.0.6
 ```
 
-Then run the GH Action "Publish Rswag Gems" with the correct version number.
+Then run the GH Action ["Publish Rswag Gems"](https://github.com/rswag/rswag/actions/workflows/deploy-rswag.yml) with the correct version number.
